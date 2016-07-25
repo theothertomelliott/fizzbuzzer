@@ -1,0 +1,85 @@
+<html>
+	<head>
+		<title>Fizz Buzz</title>
+		<!-- Bootstrap -->
+		<link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+	</head>
+	<body>
+	    <div class="container">
+	        <h1>Fizz Buzzer</h1>
+
+		<div id="fizzbuzz">
+			<div class="alert alert-danger" v-if="gameOverMessage">
+				<strong>Game Over!</strong> {{ gameOverMessage }}
+			</div>
+
+			<button type="button" class="btn btn-success" v-on:click="startGame" :disabled="running">Start</button>
+			<button type="button" class="btn btn-danger" v-on:click="stopGame" :disabled="!running">Stop</button>
+			<h2>{{ counter }}</h2>
+			<button type="button" class="btn btn-primary" v-on:click="fizz" :disabled="!running">Fizz</button>
+			<button type="button" class="btn btn-danger" v-on:click="buzz" :disabled="!running">Buzz</button>
+		</div>
+
+		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+		<script src="bower_components/jquery/dist/jquery.min.js"></script>
+		<!-- Include all compiled plugins (below), or include individual files as needed -->
+		<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+		<!-- vue.js -->
+		<script src="bower_components/vue/dist/vue.min.js"></script>
+
+		<script>
+		<!--
+		new Vue({
+	  		el: '#fizzbuzz',
+	    		data: {
+				running: false,
+		        	counter: 0,
+				interval: null,
+				gameOverMessage: null,
+			},
+	      		methods: {
+		        	startGame: function () {
+					this.running = true;
+					this.interval = setInterval(this.tick, 1500);
+					this.counter = 0;
+					this.gameOverMessage = null;
+				},
+				stopGame: function() {
+					this.running = false;
+					clearInterval(this.interval);
+					this.gameOverMessage = null;
+					this.counter = 0;
+				},
+				tick: function(){
+					this.counter++;
+				},
+				fizz: function(){
+					if(this.counter % 3 == 0) {
+						console.log("Fizz!");
+					} else {
+						this.gameOver("Fail");
+					}
+				},
+				buzz: function(){
+					if(this.counter % 5 == 0) {
+						console.log("Buzz!");
+					} else {
+						this.gameOver("Fail");
+					}
+				},
+				gameOver: function(message) {
+					if(!message) {
+						this.gameOverMessage = "Error!";
+					}
+					this.gameOverMessage = message;
+					this.running = false;
+					clearInterval(this.interval);
+				}
+			}
+		})
+		//-->
+		</script>
+
+	    </div>
+	</body>
+</html>
