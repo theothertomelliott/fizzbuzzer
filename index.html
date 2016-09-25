@@ -16,8 +16,9 @@
 			<button type="button" class="btn btn-success" v-on:click="startGame" :disabled="running">Start</button>
 			<button type="button" class="btn btn-danger" v-on:click="stopGame" :disabled="!running">Stop</button>
 			<h2>{{ counter }}</h2>
-			<button type="button" class="btn btn-primary" v-on:click="fizz" :disabled="!running">Fizz</button>
-			<button type="button" class="btn btn-danger" v-on:click="buzz" :disabled="!running">Buzz</button>
+			<button type="button" class="btn btn-primary" v-on:click="fizz" :disabled="!enableFizzBuzzButtons()">Fizz</button>
+			<button type="button" class="btn btn-danger" v-on:click="buzz" :disabled="!enableFizzBuzzButtons()">Buzz</button>
+			<button type="button" class="btn btn-danger" v-on:click="fizzbuzz" :disabled="!enableFizzBuzzButtons()">FizzBuzz</button>
 		</div>
 
 		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -38,8 +39,8 @@
 				gameOverMessage: null,
 				currentNumberHandled: false
 			},
-	      		methods: {
-		        	startGame: function () {
+	    methods: {
+		    startGame: function () {
 					this.running = true;
 					this.interval = setInterval(this.tick, 1500);
 					this.counter = 1;
@@ -52,18 +53,30 @@
 					this.counter = 0;
 				},
 				tick: function(){
-					if(!this.currentNumberHandled && (this.shouldFizz() || this.shouldBuzz())){
-						this.gameOver("Should have fizzed or buzzed.")
+					if(!this.currentNumberHandled && this.shouldSomething()){
+						if(this.shouldFizz()){
+							this.gameOver("Should have fizzed.");
+						} else if (this.shouldBuzz()) {
+							this.gameOver("Should have buzzed.");
+						} else if (this.shouldFizzBuzz()) {
+							this.gameOver("Should have fizzbuzzed.")
+						}
 						return
 					}
 					this.counter++;
 					this.currentNumberHandled = false;
 				},
+				shouldFizzBuzz: function() {
+						return this.counter % 5 == 0 && this.counter % 3 == 0;
+				},
 				shouldFizz: function() {
-						return this.counter % 3 == 0;
+						return !this.shouldFizzBuzz() && this.counter % 3 == 0;
 				},
 				shouldBuzz: function() {
-						return this.counter % 5 == 0;
+						return !this.shouldFizzBuzz() && this.counter % 5 == 0;
+				},
+				shouldSomething: function() {
+					return this.shouldFizz() || this.shouldBuzz() || this.shouldFizzBuzz();
 				},
 				fizz: function(){
 					if(this.shouldFizz()) {
@@ -81,6 +94,14 @@
 						this.gameOver("Fail");
 					}
 				},
+				fizzbuzz: function(){
+					if(this.shouldFizzBuzz()) {
+						this.currentNumberHandled = true;
+						console.log("FizzBuzz!");
+					} else {
+						this.gameOver("Fail");
+					}
+				},
 				gameOver: function(message) {
 					if(!message) {
 						this.gameOverMessage = "Error!";
@@ -88,6 +109,9 @@
 					this.gameOverMessage = message;
 					this.running = false;
 					clearInterval(this.interval);
+				},
+				enableFizzBuzzButtons: function() {
+					return this.running && !this.currentNumberHandled;
 				}
 			}
 		})
